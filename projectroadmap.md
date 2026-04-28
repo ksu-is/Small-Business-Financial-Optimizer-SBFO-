@@ -1,7 +1,7 @@
 # Project Roadmap: Small Business Financial Optimizer (SBFO)
 
 ## Sprint 2 Planned Tasks
-- [ ] Initialize Python project structure
+- [X] Initialize Python project structure
 - [ ] Design data model for transactions (CSV structure)
 - [ ] Create prototype functions for adding transactions/invoices
 - [ ] Implement file reading for financial reports
@@ -9,5 +9,5 @@
 - [ ] Document final Sprint 2 progress in this file
 
 ## Status
-- Tasks completed: 0
+- Tasks completed: 1
 - Current Sprint: 2
