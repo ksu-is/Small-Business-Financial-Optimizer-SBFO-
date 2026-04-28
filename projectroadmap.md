@@ -2,7 +2,7 @@
 
 ## Sprint 2 Planned Tasks
 - [X] Initialize Python project structure
-- [ ] Design data model for transactions (CSV structure)
+- [X] Design data model for transactions (CSV structure)
 - [ ] Create prototype functions for adding transactions/invoices
 - [ ] Implement file reading for financial reports
 - [ ] Create error handling for input data
