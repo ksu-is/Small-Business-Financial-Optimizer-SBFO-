@@ -11,6 +11,12 @@ def add_transaction(date, description, amount):
     transactions.append(entry)
     print(f"Added: {description} for ${amount}")
 
+def add_invoice(invoice_number, client, amount):
+    """Adds a new invoice to track accounts receivable."""
+    entry = {"invoice": invoice_number, "client": client, "amount": amount}
+    # (Append logic here)
+    print(f"Logged invoice #{invoice_number} for {client}")
+
 def main():
     print("SBFO: System Initialized.")
     # Example usage:
@@ -19,3 +25,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
