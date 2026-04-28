@@ -17,6 +17,11 @@ def add_invoice(invoice_number, client, amount):
     # (Append logic here)
     print(f"Logged invoice #{invoice_number} for {client}")
 
+def calculate_balance(transactions):
+    """Calculates total net balance."""
+    total = sum(item['amount'] for item in transactions)
+    return total
+
 def main():
     print("SBFO: System Initialized.")
     # Example usage:
