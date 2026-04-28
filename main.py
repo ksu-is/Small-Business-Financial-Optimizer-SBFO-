@@ -2,6 +2,8 @@
 # Author: Leonel Zepeda
 # Purpose: Track weekly financials, transactions, and project spending.
 
+import csv # Import goes at the very top
+
 # Initialize a list to store transaction dictionaries
 transactions = []
 
@@ -21,6 +23,13 @@ def calculate_balance(transactions):
     """Calculates total net balance."""
     total = sum(item['amount'] for item in transactions)
     return total
+
+def save_to_csv(data):
+    """Saves transaction list to a local CSV file."""
+    with open('financials.csv', 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=["date", "description", "amount"])
+        writer.writeheader()
+        writer.writerows(data)
 
 def main():
     print("SBFO: System Initialized.")
