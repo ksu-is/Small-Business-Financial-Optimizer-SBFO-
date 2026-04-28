@@ -31,11 +31,24 @@ def save_to_csv(data):
         writer.writeheader()
         writer.writerows(data)
 
+def filter_by_project(transactions, project_name):
+    """Filters records for a specific flooring project."""
+    return [t for t in transactions if project_name in t['description']]
+
 def main():
     print("SBFO: System Initialized.")
-    # Example usage:
+    
+    # Testing the new functions
     add_transaction("2026-04-27", "Flooring Materials", 1500.00)
-    print(f"Current transactions: {len(transactions)}")
+    add_transaction("2026-04-28", "Hardwood installation project", 3000.00)
+    
+    # Calculate and print current balance
+    balance = calculate_balance(transactions)
+    print(f"Total Balance: ${balance}")
+    
+    # Save to file
+    save_to_csv(transactions)
+    print("Data saved to financials.csv")
 
 if __name__ == "__main__":
     main()
