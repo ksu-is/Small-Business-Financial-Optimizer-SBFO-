@@ -1,56 +1,92 @@
 # Small Business Financial Optimizer (SBFO)
+# Final Version - Sprint 3 Completion
 # Author: Leonel Zepeda
-# Purpose: Track weekly financials, transactions, and project spending.
 
-import csv # Import goes at the very top
+import csv
+import os
 
-# Initialize a list to store transaction dictionaries
+# Global variable to store financial data
 transactions = []
+FILENAME = 'financials.csv'
 
-def add_transaction(date, description, amount):
-    """Adds a new financial transaction to the records."""
-    entry = {"date": date, "description": description, "amount": amount}
-    transactions.append(entry)
-    print(f"Added: {description} for ${amount}")
+def load_from_csv():
+    """Reads financial records from the CSV file if it exists."""
+    global transactions
+    if os.path.exists(FILENAME):
+        try:
+            with open(FILENAME, 'r') as f:
+                reader = csv.DictReader(f)
+                transactions = list(reader)
+                # Convert string amounts back to floats for math
+                for t in transactions:
+                    t['amount'] = float(t['amount'])
+            print(f"--- System: {len(transactions)} records loaded successfully. ---")
+        except Exception as e:
+            print(f"Error loading file: {e}")
+    else:
+        print("--- System: No existing records found. Starting fresh. ---")
 
-def add_invoice(invoice_number, client, amount):
-    """Adds a new invoice to track accounts receivable."""
-    entry = {"invoice": invoice_number, "client": client, "amount": amount}
-    # (Append logic here)
-    print(f"Logged invoice #{invoice_number} for {client}")
+def save_to_csv():
+    """Saves the current transaction list to the CSV file."""
+    try:
+        with open(FILENAME, 'w', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=["date", "description", "amount"])
+            writer.writeheader()
+            writer.writerows(transactions)
+        print("--- System: Data saved to disk. ---")
+    except Exception as e:
+        print(f"Error saving data: {e}")
 
-def calculate_balance(transactions):
-    """Calculates total net balance."""
-    total = sum(item['amount'] for item in transactions)
-    return total
+def add_transaction():
+    """Collects user input and adds a transaction with error handling."""
+    date = input("Enter date (YYYY-MM-DD): ")
+    desc = input("Enter description (e.g., Flooring Materials - Job #101): ")
+    
+    try:
+        amount = float(input("Enter amount (use negative for expenses): "))
+        entry = {"date": date, "description": desc, "amount": amount}
+        transactions.append(entry)
+        print(f"Successfully added: {desc}")
+    except ValueError:
+        print("Invalid amount! Please enter a number (e.g., 1500.50).")
 
-def save_to_csv(data):
-    """Saves transaction list to a local CSV file."""
-    with open('financials.csv', 'w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=["date", "description", "amount"])
-        writer.writeheader()
-        writer.writerows(data)
+def show_summary():
+    """Calculates and displays the current financial position."""
+    if not transactions:
+        print("No transactions recorded yet.")
+        return
 
-def filter_by_project(transactions, project_name):
-    """Filters records for a specific flooring project."""
-    return [t for t in transactions if project_name in t['description']]
+    total_balance = sum(t['amount'] for t in transactions)
+    print("\n" + "="*30)
+    print(f"CURRENT BALANCE: ${total_balance:,.2f}")
+    print("="*30)
+    for t in transactions:
+        print(f"{t['date']} | {t['description'][:20]:<20} | ${t['amount']:>10,.2f}")
+    print("="*30)
 
 def main():
-    print("SBFO: System Initialized.")
+    """Primary Program Flow."""
+    print("Welcome to the Small Business Financial Optimizer")
+    load_from_csv()
     
-    # Testing the new functions
-    add_transaction("2026-04-27", "Flooring Materials", 1500.00)
-    add_transaction("2026-04-28", "Hardwood installation project", 3000.00)
-    
-    # Calculate and print current balance
-    balance = calculate_balance(transactions)
-    print(f"Total Balance: ${balance}")
-    
-    # Save to file
-    save_to_csv(transactions)
-    print("Data saved to financials.csv")
+    while True:
+        print("\n[1] Add Transaction/Invoice")
+        print("[2] View Financial Summary")
+        print("[3] Save and Exit")
+        
+        choice = input("\nSelect an option: ")
+        
+        if choice == '1':
+            add_transaction()
+        elif choice == '2':
+            show_summary()
+        elif choice == '3':
+            save_to_csv()
+            print("Goodbye, Leonel!")
+            break
+        else:
+            print("Invalid selection. Please try again.")
 
 if __name__ == "__main__":
     main()
-
 
